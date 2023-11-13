@@ -28,9 +28,9 @@
               
                   @csrf
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Your Name</label>
+                      <label for="yourUsername" class="form-label"><i class="bi bi-person-circle"></i> Nama</label>
                       <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-person-circle"></i></span>
+                
                         <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" />
                         @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -38,46 +38,44 @@
                       </div>
                     </div>
                  
+                    
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Role</label>
+                      <label for="yourUsername" class="form-label"><i class="bi bi-people-fill"></i> Jabatan</label>
                       <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-people-fill"></i></span>
-                        <select class="form-select @error('room_id') is-invalid @enderror" name="room_id" id="room_id" aria-label="Default select example" value="{{ old('room_id') }}">
-                      
-                          <option selected>Select Role</option>
-                          <option value= 1 >Admin</option>
-                          <option value= 2>Kepala Ruangan</option>
-                          <option value= 3 >Analis</option>
+                        <select class="form-select @error('role') is-invalid @enderror" name="role" id="role" aria-label="Default select example" value="{{ old('room_id') }}">
+                          <option selected>Pilih Jabatan</option>
+                          <option value="admin" >Admin</option>
+                          <option value="kepala ruangan">Kepala Ruangan</option>
+                          <option value="JKN" >JKN</option>
                         </select>
                      
-                        @error('room_id')
+                        @error('role')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                       </div>
                     </div>
+
+
+                    <div class="col-12">
+                      <label for="yourUsername" class="form-label"><i class="bi bi-house-door"></i> Ruangan</label>
+                      <div class="input-group has-validation">
+                        <select class="form-select @error('room') is-invalid @enderror room" name="room" id="room" aria-label="Default select example" value="{{ old('room_id') }}">
+                          @foreach($room as $data)
+                          <option value="{{ $data->room }}" >{{ $data->room }}</option>
+                          @endforeach
+                        </select>
+                        @error('room')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                      </div>
+                    </div>
+
                     
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Room</label>
+                      <label for="yourUsername" class="form-label"><i class="bi bi-person-fill"></i> Nama Pengguna</label>
                       <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-house-door-fill"></i></i></span>
-                        <select class="form-select @error('role_id') is-invalid @enderror" id="role_id" name="role_id" aria-label="Default select example" value="{{ old('role_id') }}">
-                          <option selected>select Room</option>
-                          <option value=1>JKN</option>
-                          <option value=2>APS</option>
-                          <option value=3>POLIKLINIK</option>
-                        </select>
-                     
-                        @error('role_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                      </div>
-                    </div>
-
-                    <div class="col-12">
-                      <label for="yourUsername" class="form-label">Username</label>
-                      <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-person-fill"></i></span>
+                       
                         <input type="text" name="user_name" id="user_name" class="form-control @error('user_name') is-invalid @enderror" value="{{ old('user_name') }}" />
                         @error('user_name')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -86,9 +84,9 @@
                     </div>
 
                     <div class="col-12">
-                      <label for="yourPassword" class="form-label">Password</label>
+                      <label for="yourPassword" class="form-label"> <i class="bi bi-lock-fill"></i>Password</label>
                       <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-lock-fill"></i></span>
+      
                       <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password" required>
                        @error('password')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -97,9 +95,8 @@
                     </div>
 
                     <div class="col-12">
-                      <label for="yourPassword" class="form-label">Confirm Password</label>
+                      <label for="yourPassword" class="form-label"><i class="bi bi-lock-fill"></i> Confirm Password</label>
                       <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-lock-fill"></i></span>
                       <input type="password" name="password_confirmation" class="form-control" id="password" required>
                     
                       </div>
@@ -149,8 +146,8 @@
    --}}
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  {{-- <script src="{{ asset('assets/js/auth/register.js') }}"></script> --}}
-
-
-
+   
+   <script src="{{ asset('assets/js/scripts/select2.min.js') }}"></script>
+   
+   <script src="{{ asset('assets/js/auth/register.js') }}"></script>
   @endsection

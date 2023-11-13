@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRolesTable extends Migration
+class AddDocStatusPatientToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('role_name', 255);
-            $table->timestamps();
+        Schema::table('patients', function (Blueprint $table) {
+            $table->string('doc_status_patient')->nullable(true)->after('status_submission');
         });
     }
 
@@ -27,6 +25,8 @@ class CreateRolesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('roles');
+        Schema::table('patients', function (Blueprint $table) {
+            //
+        });
     }
 }

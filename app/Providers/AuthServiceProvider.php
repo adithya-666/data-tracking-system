@@ -24,7 +24,11 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+        
+        // Menambah gate role pada method boot() untuk mengecek role user
 
-        //
+        // Gate::define('role', function($user, ...$role){
+        //     return in_array($user->role, $role);
+        // });
     }
 }

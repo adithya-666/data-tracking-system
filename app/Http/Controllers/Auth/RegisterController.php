@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\Room;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
 
 use Carbon\Carbon;
 class RegisterController extends Controller
@@ -35,7 +35,14 @@ class RegisterController extends Controller
 
 
     public function index (){
-        return View('auth.register');
+
+        $room = Room::all();
+
+     $data = [
+        'room' => $room
+     ];
+
+        return View('auth.register', $data);
     }
 
 
@@ -60,9 +67,8 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'user_name' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:1', 'confirmed'],
-            'role_id' => ['required'],
-            'room_id' => ['required'],
-          
+            'role' => ['required'],
+            'room' => ['required'],   
         ]);
         $carbonInstance = Carbon::now();
         $formattedDate = $carbonInstance->format('Y-m-d H:i:s');

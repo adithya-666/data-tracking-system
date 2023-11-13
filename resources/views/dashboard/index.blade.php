@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@extends('layouts.sidebar')
+
 @section('content')
 <main id="main" class="main">
 
@@ -18,7 +18,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Detail Pasien</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Detail Pasien </h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -30,31 +30,60 @@
                   <th class="py-1 w-100px">No. SEP </th>
                   <th>:</th>
          
-                  <td class="sep-detail py-1 text-gray-600 w-auto">-</th>
+                  <td class="sep-detail py-1 text-gray-600 w-auto detail-pasien">-</th>
                 </tr>
                 <tr>
-                  <th class="py-1 w-100px">Name </th>
+                  <th class="py-1 w-100px">Nama Pasien </th>
                   <th>:</th>
-                  <td class="name-detail py-1 text-gray-600 w-auto">-</th>
+                  <td class="name-detail py-1 text-gray-600 w-auto detail-pasien">-</th>
                 </tr>
                 <tr>
                   <th class="py-1 w-100px">Medrec </th>
                   <th>:</th>
-                  <td class="medrec-detail py-1 text-gray-600 w-auto">-</th>
+                  <td class="medrec-detail py-1 text-gray-600 w-auto detail-pasien">-</th>
                 </tr>
                 <tr>
-                  <th class="py-1 w-100px">No. Order</th>
+                  <th class="py-1 w-100px">Ruangan</th>
                   <th>:</th>
-                  <td class="order-detail py-1 text-gray-600 w-auto">-</th>
+                  <td class="room-detail py-1 text-gray-600 w-auto detail-pasien">-</th>
                 </tr>
+                <tr>
+                  <th class="py-1 w-100px">Dokter</th>
+                  <th>:</th>
+                  <td class="doctor-detail py-1 text-gray-600 w-auto detail-pasien">-</th>
+                </tr>
+                <tr>
+                  <th class="py-1 w-100px">Tanggal Masuk</th>
+                  <th>:</th>
+                  <td class="date_in-detail py-1 text-gray-600 w-auto detail-pasien">-</th>
+                </tr>
+             
               </table>
+              <input type="hidden" id="detail-patient-id" name="detail-patient-id">
+              <div class="mb-3 mt-3">
+                <label for="exampleFormControlInput1" class="form-label">Status Pasien</label>
+                {{-- <input class="form-control" name="edit-status-baru"  id="edit-status-baru"> --}}
+                <select name="edit-status-baru" id="edit-status-baru"  class="form-select" aria-label="Default select example">
+                  <option selected>Pilih Status</option>
+                  <option value="Berkas belum lengkap">Berkas belum lengkap</option>
+                  <option value="Berkas ada di GP">Berkas ada di GP</option>
+                  <option value="Berkas ada di DPJP">Berkas ada di DPJP</option>
+                  <option value="Rujuk internal">Rujuk internal</option>
+                  <option value="Pasien tidak datang">Pasien tidak datang</option>
+                </select>
+              </div>
+              <div class="mb-3 mt-3">
+                <label for="exampleFormControlInput1" class="form-label">Catatan Pasien</label>
+                <input class="form-control" name="edit-note-patient"  id="edit-note-patient">
+              </div>
+             
             </div>
           </div>
          </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+        <button type="button" class="btn btn-primary btn-pasien">Simpan Perubahan</button>
       </div>
     </div>
   </div>
@@ -72,17 +101,155 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-lg-12">
+          <div class="col-lg-12" >
             <div class="table-responsive edit-modal">
-             
+              <form action="{{ url('/edit-document') }}" method="PUT" id="form-edit" enctype="multipart/form-data">
+                <input type="hidden" name="_token" id="edit-doc-token" value="{{ csrf_token() }}">
+                <input type="hidden" data-doc-id="" data-patient-id="" id="edit-doc-id">
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Document <span class="important">*</span></label>
+                    <input type="text" id="edit_doc" name="edit_doc" class="form-control" id="exampleFormControlInput1">
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Upload Document <small id="doc-file-name" style="font-style: italic"></small></label>
+                    <input type="file" name="file" class="form-control" id="upload-doc" >
+                  </div>
+                  {{-- <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Status Dokumen</label>
+                   <p class="doc-status">-</p>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label doc-time-name"></label>
+                   <p class="doc-time"></p>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Catatan Diajukan</label>
+                    <textarea class="form-control" name="edit-doc_note_sub"  id="edit-doc_note_sub" style="height: 20px"></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Catatan Verifikasi</label>
+                    <textarea class="form-control" name="edit-doc_note_ver"  id="edit-doc_note_ver"  id="edit-note" style="height: 20px"></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label label-revisi  d-none">Catatan Revisi</label>
+                    <textarea class="form-control input-revisi  d-none" name="edit-doc_note_revisi"  id="edit-doc_note_revisi"  id="edit-note" style="height: 20px"></textarea>
+                  </div> --}}
             </div>
           </div>
-         </div>
+        </div>
+         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-success btn-edit-revisi d-none">Ajukan Revisi</button>
+        <button type="submit" class="btn btn-primary btn-edit-doc">Simpan Perubahan</button>
       </div>
+    </form>
+    </div>
+  </div>
+</div>
+ <!-- Modal detail -->
+
+
+        <!-- Modal edit document -->
+<div class="modal fade" id="revisiDocument-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Detail Document Pasien Revisi</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12" >
+            <div class="table-responsive edit-modal">
+              <form action="{{ url('/revisi-document') }}" method="PUT" id="form-revisi" enctype="multipart/form-data">
+      
+                <input type="hidden" data-revisi-doc-id="" data-revisi-patient-id="" id="revisi-doc-id">
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Document <span class="important">*</span></label>
+                    <input type="text" id="revisi_doc" name="revisi_doc" class="form-control" id="exampleFormControlInput1">
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Upload Document <small id="doc-file-name" style="font-style: italic"></small></label>
+                    <input type="file" name="revisi-file" class="form-control" id="upload-doc" >
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Status Dokumen</label>
+                   <p class="doc-status">-</p>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label doc-time-name"></label>
+                   <p class="doc-time"></p>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Catatan Diajukan</label>
+                    <textarea class="form-control" name="revisi_doc_note_sub"  id="revisi_doc_note_sub" style="height: 20px"></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Catatan Verifikasi</label>
+                    <textarea class="form-control" name="revisi_doc_note_ver"  id="revisi_doc_note_ver"   style="height: 20px"></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label label-revisi  d-none">Catatan Revisi</label>
+                    <textarea class="form-control input-revisi  d-none" name="revisi_doc_note_revisi"  id="revisi_doc_note_revisi"   style="height: 20px"></textarea>
+                  </div>
+            </div>
+          </div>
+        </div>
+         
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success btn-revisi">Ajukan Revisi</button>
+
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+ <!-- Modal detail -->
+
+ 
+        <!-- Modal edit document -->
+<div class="modal fade" id="pindahkan-patient-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Pindahkan Ruangan Pasien</strong></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12" >
+            <div class="table-responsive edit-modal">
+              <form action="{{ url('/edit-patient') }}" method="PUT" id="form-pindahkan-pasien">
+                <input type="hidden" name="pindah-pasien-id" id="pindah-pasien-id" value="">
+                <input type="hidden" name="_token" id="edit-doc-token" value="{{ csrf_token() }}">
+                <input type="hidden" data-doc-id="" data-patient-id="" id="edit-doc-id">
+                <div class="mb-3">
+                  <label class="form-label">Nama Pasien: <span id="nama-pasien-pindah"></span></label>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Med Rec: <span id="medrec-pasien-pindah"></span></label>
+                </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label"><strong>Pilih Ruangan</strong></label>
+                    <select type="text" id="pindah-pasien-room" name="room" class="form-control" id="exampleFormControlInput1">
+                      @foreach($rooms as $key => $value)
+                      <option value="{{$value}}">{{$value}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                  
+            </div>
+          </div>
+        </div>
+         
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-edit-revisi d-none">Ajukan Revisi</button>
+        <button type="submit" class="btn btn-primary btn-edit-doc">Pindahkan Pasien</button>
+      </div>
+    </form>
     </div>
   </div>
 </div>
@@ -92,26 +259,97 @@
       <div class="row">
 
         <!-- Left side columns -->
-        <div class="col-lg-8">
+        <div class="col-lg-12">
           <div class="row">
 
-            <!-- Recent Sales -->
-            <div class="col-12">
+          <div class="col-12">
+                <div class="card recent-sales ">
+  
+                  <div class="card-body">
+                    <h5 class="card-title">Sinkronisasi Data Dengan SIMRS</span></h5>
+                    <form action="/dashboard" method="GET">
+                        <div class="row">
+                      <div class="col-md-2">
+                        <label>Dari</label>
+                        <input type="date" class="form-control" name="date_from" id="sync-date-from">
+                      </div>
+                      <div class="col-md-2">
+                        <label>Sampai</label>
+                        <input type="date" class="form-control" name="date_to" id="sync-date-to">
+                      </div>
+                      <div class="col-md-2">
+                      <button class="btn btn-success mt-4" id="sync-data-btn" type="button">Ambil Data</button>
+                  <button class="btn btn-primary" type="button" disabled id="sync-data-loading" hidden>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Loading...
+                  </button>
+                      </div>
+                    </div>
+                      </form>
+                  </div>
+                </div>
+                
+              </div><!-- End Recent Sales -->
+          </div>
+        </div><!-- End Left side columns -->
+
+        <div class="row">
+           <!-- Data Pasien -->
+           <div class="col-8">
               <div class="card recent-sales ">
 
                 <div class="card-body">
-                  <h5 class="card-title">Recent Sales <span>| Today</span></h5>
-                  <button class="btn btn-success" >Sync</button>
+                  <h5 class="card-title">Data Pasien <span> | {{ Auth::user()->room }} </span> </h5>
+                  <form action="/dashboard" method="GET">
+                        <div class="row">
+                      <div class="col-md-3">
+                        <label>Filter Tanggal</label>
+                        <center>
+                          <input type="text" id="config-demo" class="form-control">
+                        </center>
+                      </div>
+                   
+                      <div class="col-md-2">
+                        <button id="clear-date-range" class="btn btn-secondary mt-4">Hapus Tanggal</button>
+                      </div>
+                    </div>
+                      </form>
+               
+                   <br> <br>
+                      
+                   <div class="button-container">
+                   <button type="button" class="btn btn-outline-warning btn-ajukan mb-2 " id="filter-submission-btn">
+                      Diajukan <span class="badge bg-white text-warning">{{$jml_submission}}</span>
+                    </button>
+                    <button type="button" class="btn btn-outline-info  mb-2 ml-1" id="filter-verifikasi-btn">
+                      Verifikasi <span class="badge bg-white text-info">{{$jml_ver}}</span>
+                    </button>
+                    <button type="button" class="btn btn-outline-danger  mb-2" id="filter-revisi-btn">
+                      Revisi <span class="badge bg-white text-danger">{{$jml_revisi}}</span>
+                     </button> 
+                    <button type="button" class="btn btn-outline-success mb-2" id="filter-grouping-btn">
+                      Grouping <span class="badge bg-white text-success">{{$jml_grouping}}</span>
+                    </button> 
+                    <button type="button" class="btn btn-outline-success mb-2" id="filter-selesai-btn">
+                      Selesai <span class="badge bg-white text-success">{{$jml_selesai}}</span>
+                    </button> 
+                    {{-- <button type="button" class="btn btn-outline-danger mb-2" id="filter-ajukan-btn">
+                      Ajukan Dokumen <span class="badge bg-white text-danger">{{$jml_ajukan_dokumen}}</span>
+                     </button>  --}}
+                  </div>
+
+
                        <!--begin::Datatable-->
                        <table class="table gy-1 align-middle table-striped px-0 datatable-ajax">
                         <thead>
                           <tr class="text-gray-600 fw-bolder fs-7 text-uppercase gs-0">
                           
                             <th class="text-start" width="15%">No. SEP</th>
-                            <th class="text-start" width="25%">Patient Name</th>
-                            <th class="text-start" width="20%">No. Order</th>
-                            <th class="text-start" width="20%">Date In</th>
-                            <th class="text-start" width="20%">Date Out</th>
+                            <th class="text-start" width="25%">Nama Pasien</th>
+                            <th class="text-start" width="20%">Medrec</th>
+                            <th class="text-start" width="20%">Tanggal Masuk</th>
+                            <th class="text-start" width="20%">Tanggal Keluar</th>
+                            <th class="text-start" width="20%">Penjamin</th>
                             <th class="text-start" width="20%">Status</th>
                             <th class="text-start" width="20%">Action</th>
                           </tr>
@@ -123,285 +361,128 @@
                 </div>
 
               </div>
-            </div><!-- End Recent Sales -->
+            </div><!-- End Data Pasien -->
+<!-- End side Left -->
 
+
+               <!-- Right side columns -->
+        <div class="col-4">
+
+<!-- Budget Report -->
+<div class="card">      
+  <div class="card-body pb-0">
+    <h5 class="card-title">Ajukan Dokumen</h5>
+   
+{{-- Detail Patient --}}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="table-responsive">
+                     <table>
+                        <tr>
+                          <th class="py-1 w-100px">No. SEP</th>
+                          <th>:</th>
+                          <td class="sep-detail py-1 text-gray-600 w-auto detail-pasien">-</th>
+                        </tr>
+                        <tr>
+                          <th class="py-1 w-100px">Nama Pasien </th>
+                          <th>:</th>
+                          <td class="name-detail py-1 text-gray-600 w-auto detail-pasien">-</th>
+                        </tr>
+                        <tr>
+                          <th class="py-1 w-100px">Medrec</th>
+                          <th>:</th>
+                          <td class="medrec-detail py-1 text-gray-600 w-auto detail-pasien">-</th>
+                        </tr>
+                        <tr>
+                          <th class="py-1 w-100px">Jenis Kelamin</th>
+                          <th>:</th>
+                          <td class="gender-detail py-1 text-gray-600 w-auto detail-pasien">-</th>
+                        </tr>
+                        <tr>
+                          <th class="py-1 w-100px">Tanggal Lahir</th>
+                          <th>:</th>
+                          <td class="birthdate-detail py-1 text-gray-600 w-auto detail-pasien">-</th>
+                        </tr>
+                        <tr>
+                          <th class="py-1 w-100px">Catatan Revisi</th>
+                          <th>:</th>
+                          <td class="revisi-detail py-1 text-gray-600 w-auto detail-pasien">-</th>
+                        </tr>
+                      </table>
+    </div>
+  </div>
+ </div>
+  {{-- End Detail Patient --}}
+  <br>
+
+   {{-- Start Form --}}
+   <form action="{{ url('/create-data') }}" method="POST" id="form-create" enctype="multipart/form-data">
+   
+    <input type="hidden" id="patient-id" name="patient_id">
+      <div class="row">
+    <div class="col-lg-6">
+      <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Dokumen <span class="important">*</span></label>
+        <input type="text" id="document" name="document[]" class="form-control" id="exampleFormControlInput1"  >
+      </div>
     
+    </div>
+    <div class="col-lg-6">
+      <div class="mb-3">
+        <label for="formFileMultiple" class="form-label">Upload File</label>
+        <input class="form-control" id="file" name="file[]"  type="file" id="formFileMultiple" multiple>
+      </div>
+    
+    </div>
+  </div>
 
-          </div>
-        </div><!-- End Left side columns -->
+    <div class="add-information">
+      <button type="button" class="btn btn-info mb-4 addInput" id="addInput"><i class="bi bi-plus"></i> Add</button>
+    </div>
 
-        <!-- Right side columns -->
-        <div class="col-lg-4">
+    {{-- <div class="row">
+      <div class="col-lg-12">
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">Catatan Pasien</label>
+          <textarea class="form-control" name="note_patient"  id="note_patient" style="height: 20px"></textarea>
+        </div>
+      </div>
+    </div> --}}
 
+    <div class="tombol-information">
+    <button type="submit" class="btn btn-primary mb-4 submit-information " id="submitButton">Upload</button>
+  </div>
+</form>
+{{-- End Form --}}
 
-                    <!-- Budget Report -->
-                    <div class="card">
-                      <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                          <li class="dropdown-header text-start">
-                            <h6>Filter</h6>
-                          </li>
-          
-                          <li><a class="dropdown-item" href="#">Today</a></li>
-                          <li><a class="dropdown-item" href="#">This Month</a></li>
-                          <li><a class="dropdown-item" href="#">This Year</a></li>
-                        </ul>
-                      </div>
-          
-                      <div class="card-body pb-0">
-                        <h5 class="card-title">Add information Document </h5>
-                        {{-- Detail Patient --}}
-                       <div class="row">
-                        <div class="col-lg-12">
-                          <div class="table-responsive">
-                            <table>
-                              <tr>
-                                <th class="py-1 w-100px">No. SEP </th>
-                                <th>:</th>
-                       
-                                <td class="sep-detail py-1 text-gray-600 w-auto">-</th>
-                              </tr>
-                              <tr>
-                                <th class="py-1 w-100px">Name </th>
-                                <th>:</th>
-                                <td class="name-detail py-1 text-gray-600 w-auto">-</th>
-                              </tr>
-                            </table>
-                          </div>
-                        </div>
-                       </div>
-                        {{-- End Detail Patient --}}
-                       <br>
-                       {{-- Start Form --}}
-                       <form action="{{ url('/create-data') }}" method="POST" id="form-create">
-                        <input type="hidden" id="patient-id" name="patient_id">
-                          <div class="row">
-                        <div class="col-lg-6">
-                          <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Document <span class="important">*</span></label>
-                            <input type="text" id="document" name="document[]" class="form-control" id="exampleFormControlInput1" required >
-                          </div>
-                          
-                        </div>
-                        <div class="col-lg-6">
-                          <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Note <span class="important">*</span></label>
-                            <textarea class="form-control" name="note[]"  id="note" style="height: 20px"></textarea>
-                          </div>
-                        </div>
-
-                        {{-- <div class="col-lg-3">
-                          <label class="form-check-label" for="flexCheckDefault">
-                            Ver
-                           </label>
-                            <div class="form-check mt-3">
-                              <input class="form-check-input verifikasi-checkbox" name="verifikasi[]" type="checkbox" value="" id="verifikasi" >  
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                          <label class="form-check-label" for="flexCheckDefault">
-                            Val
-                           </label>
-                            <div class="form-check mt-3">
-                              <input class="form-check-input validasi-checkbox" name="validasi[]" type="checkbox" value="" id="validasi" >
-                            </div>
-                        </div> --}}
-
-                      </div>
- 
-                        <div class="add-information">
-                          <button type="button" class="btn btn-info mb-4 addInput" id="addInput"><i class="bi bi-plus"></i> Add</button>
-                        </div>
-          
-                        <div class="tombol-information">
-                        <button type="submit" class="btn btn-success mb-4 submit-information" id="submitButton">Submit</button>
-                      </div>
-                    </form>
-             {{-- End Form --}}
-               
-                      </div>
-                    </div><!-- End Budget Report -->
+  </div>
+</div><!-- End Budget Report -->
 
 
 
-          <!-- Recent Activity -->
-          <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
+<!-- Recent Activity -->
+<div class="card">
 
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
+<div class="card-body">
+<h5 class="card-title">Status Dokumen Diajukan</span></h5>
 
-            <div class="card-body">
-              <h5 class="card-title">Recent Activity <span>| Today</span></h5>
-
-              {{-- <form action="" id="form-detail">
-                <div class="document-container d-none">
-                 <div class="row show-edit">
-
-                 </div>
-                  <!-- Elemen input dan textarea akan ditambahkan di sini -->
-                </div>
-           
-            </form> --}}
-
-            <table class="table gy-1 align-middle table-striped px-0 history-patient">
-              <thead>
-                <tr class="text-gray-600 fw-bolder fs-7 text-uppercase gs-0">
-                  <th class="text-start" width="25%">Document Name</th>
-                  <th class="text-start" width="20%">Note</th>
-                  <th class="text-start" width="20%">Status</th>
-                  <th class="text-start" width="20%">Action</th>
-                </tr>
-              </thead>
-              <tbody ></tbody>
-            </table>
-            </div>
-          </div><!-- End Recent Activity -->
+<table class="table gy-1 align-middle table-striped px-0 history-patient">
+<thead>
+<tr class="text-gray-600 fw-bolder fs-7 text-uppercase gs-0">
+<th class="text-start" width="25%">Document Name</th>
+<th class="text-start" width="20%">Status</th>
+<th class="text-start" width="20%">Action</th>
+</tr>
+</thead>
+<tbody ></tbody>
+</table>
+</div>
+</div><!-- End Recent Activity -->
 
 
-
-          <!-- Website Traffic -->
-          <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
-
-            <div class="card-body pb-0">
-              <h5 class="card-title">Website Traffic <span>| Today</span></h5>
-
-              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  echarts.init(document.querySelector("#trafficChart")).setOption({
-                    tooltip: {
-                      trigger: 'item'
-                    },
-                    legend: {
-                      top: '5%',
-                      left: 'center'
-                    },
-                    series: [{
-                      name: 'Access From',
-                      type: 'pie',
-                      radius: ['40%', '70%'],
-                      avoidLabelOverlap: false,
-                      label: {
-                        show: false,
-                        position: 'center'
-                      },
-                      emphasis: {
-                        label: {
-                          show: true,
-                          fontSize: '18',
-                          fontWeight: 'bold'
-                        }
-                      },
-                      labelLine: {
-                        show: false
-                      },
-                      data: [{
-                          value: 1048,
-                          name: 'Search Engine'
-                        },
-                        {
-                          value: 735,
-                          name: 'Direct'
-                        },
-                        {
-                          value: 580,
-                          name: 'Email'
-                        },
-                        {
-                          value: 484,
-                          name: 'Union Ads'
-                        },
-                        {
-                          value: 300,
-                          name: 'Video Ads'
-                        }
-                      ]
-                    }]
-                  });
-                });
-              </script>
-
-            </div>
-          </div><!-- End Website Traffic -->
-
-          <!-- News & Updates Traffic -->
-          <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
-
-            <div class="card-body pb-0">
-              <h5 class="card-title">News &amp; Updates <span>| Today</span></h5>
-
-              <div class="news">
-                <div class="post-item clearfix">
-                  <img src="assets/img/news-1.jpg" alt="">
-                  <h4><a href="#">Nihil blanditiis at in nihil autem</a></h4>
-                  <p>Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
-                </div>
-
-                <div class="post-item clearfix">
-                  <img src="assets/img/news-2.jpg" alt="">
-                  <h4><a href="#">Quidem autem et impedit</a></h4>
-                  <p>Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
-                </div>
-
-                <div class="post-item clearfix">
-                  <img src="assets/img/news-3.jpg" alt="">
-                  <h4><a href="#">Id quia et et ut maxime similique occaecati ut</a></h4>
-                  <p>Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
-                </div>
-
-                <div class="post-item clearfix">
-                  <img src="assets/img/news-4.jpg" alt="">
-                  <h4><a href="#">Laborum corporis quo dara net para</a></h4>
-                  <p>Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
-                </div>
-
-                <div class="post-item clearfix">
-                  <img src="assets/img/news-5.jpg" alt="">
-                  <h4><a href="#">Et dolores corrupti quae illo quod dolor</a></h4>
-                  <p>Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos eius...</p>
-                </div>
-
-              </div><!-- End sidebar recent posts-->
-
-            </div>
-          </div><!-- End News & Updates -->
-
-        </div><!-- End Right side columns -->
+</div><!-- End Right side columns -->
+        </div>
+     
 
       </div>
     </section>

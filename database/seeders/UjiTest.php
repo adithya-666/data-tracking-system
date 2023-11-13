@@ -24,6 +24,8 @@ class UjiTest extends Seeder
                 'medrec' => $faker->randomDigitNot(10),
                 'no_order' => $faker->randomDigitNot(10),
                 'patient_name' => $faker->name(),
+                'doctor' => $faker->name(),
+     
                 'no_sep' => $faker->numberBetween(0, 100),
             ]);
         }

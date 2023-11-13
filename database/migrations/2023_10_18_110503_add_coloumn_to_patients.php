@@ -14,7 +14,7 @@ class AddColoumnToPatients extends Migration
     public function up()
     {
         Schema::table('patients', function (Blueprint $table) {
-            $table->string('no_sep')->after('id');
+         
             $table->string('patient_name')->after('medrec');
         });
     }

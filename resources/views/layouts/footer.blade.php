@@ -1,4 +1,5 @@
 
+
 @section('footer')
 <!-- ======= Footer ======= -->
  <footer id="footer" class="footer">
@@ -45,14 +46,18 @@
 
   <script src="{{ asset('assets/vendor/Datatable/datatables.min.js') }}"></script>
 
+
+  {{-- Select 2 --}}
+
+<script src="{{ asset('assets/js/scripts/select2.min.js') }}"></script>
+
+  {{-- Daterangepicker --}}
+
+<script src="{{ asset('assets/js/scripts/daterangepicker.js') }}"></script>
+
   {{-- Dashboard --}}
   <script src="{{ asset('assets/js/dashboard/index.js') }}"></script>
-
-
-  
-
-
-@endsection
 </body>
 
 </html>
+@endsection

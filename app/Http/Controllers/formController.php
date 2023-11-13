@@ -5,6 +5,8 @@ use App\Models\Patient;
 use App\Models\Doc_patient;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class formController extends Controller
 {
@@ -13,8 +15,18 @@ class formController extends Controller
         // return $request->all();
 
         try {
-            // Lakukan operasi penyimpanan data
-   
+
+            $validator = Validator::make($request->all(), [
+                'document.*' => ['required']
+
+                 
+            ]);
+            // return $validator;
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 0,
+                    'errors' => $validator->errors()], 422);
+            } else {
             $patientId  = $request->patient_id;
 
     
@@ -29,6 +41,7 @@ class formController extends Controller
                 $newData->save();
             }
             return response()->json(['message' => 'Data berhasil disimpan']);
+        }
         } catch (\Exception $e) {
             return response()->json(['message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500); 
         }

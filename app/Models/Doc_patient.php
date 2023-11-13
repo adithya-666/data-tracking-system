@@ -26,7 +26,14 @@ class Doc_patient extends Model
         'doc_time_val',
         'doc_note_sub',
         'doc_note_ver',
-        'doc_note_val'
+        'doc_note_val',
+        'doc_revisi',
+        'doc_note_revisi',
+        'doc_user_revisi',
+        'doc_time_revisi',
+        'doc_status',
+        'file',
+        'file_name'
 
     ];
 }

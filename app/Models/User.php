@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+  
 
     /**
      * The attributes that are mass assignable.
@@ -20,8 +23,8 @@ class User extends Authenticatable
         'name', 
         'password',
         'user_name',
-        'role_id',
-        'room_id',
+        'role',
+        'room',
         'last_active',
         'update_at',
         'created_at'

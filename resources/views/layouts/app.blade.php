@@ -10,6 +10,9 @@
   <meta content="" name="description">
   <meta content="" name="keywords">
 
+      <!-- Fonts -->
+      <link rel="dns-prefetch" href="//fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
 
       <!-- CSRF Token -->
@@ -37,6 +40,9 @@
   <!-- Template Main CSS File -->
 
   <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+
+{{-- Select 2 --}}
+  <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet">
   
 
   <!-- =======================================================

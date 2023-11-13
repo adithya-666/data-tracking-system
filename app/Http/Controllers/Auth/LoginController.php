@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -34,8 +34,16 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
- 
-            return redirect()->intended('dashboard');
+
+            if(Auth::user()->role === 'admin') {
+                return redirect()->intended('dashboard');
+            } elseif(Auth::user()->role === 'JKN')
+            {
+                return redirect()->intended('dashboard-jkn');
+            }else{
+                return redirect()->intended('dashboard-karu');
+            }
+          
         }
 
         return back()->with('LoginError', 'Login Failed !!!' );
@@ -44,14 +52,9 @@ class LoginController extends Controller
     }
 
     public function logout(Request $request) {
-
-        
         Auth::logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
         return redirect('/');
     }
 }

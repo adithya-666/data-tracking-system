@@ -18,6 +18,8 @@ class Patient extends Model
         return $this->belongsTo('App\Models\Doc_patient', 'id', 'patient_id');
     }
 
+    
+
     protected $fillable = [
 
         'no_sep',
@@ -38,11 +40,16 @@ class Patient extends Model
         'time_val',
         'time_grouping',
         'note_sub',
+        'note_admin',
+        'note_jkn',
         'note_ver',
         'note_val',
         'note_grouping',
         'created_at',
-        'update_at'
+        'update_at',
+        'status_revisi',
+        'note_revisi',
+        'time_revisi'
 
     ];
 }
